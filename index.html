@@ -243,7 +243,7 @@
         statusDiv.textContent += "\nStatus: Adding event listener..."; // Status message
 
         // --- SIMPLIFIED EVENT LISTENER ATTACHMENT ---
-        commandEventCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications); // Attach listener DIRECTLY to commandEventCharacteristic
+        commandEventCharacteristic.addEventListener('oncharacteristicvaluechanged', handleNotifications); // Attach listener DIRECTLY to commandEventCharacteristic
 
         statusDiv.textContent += "\nStatus: Event listener added."; // Status message
         console.log('Event listener added for characteristicvaluechanged.'); // Console log
