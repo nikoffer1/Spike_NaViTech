@@ -1,22 +1,69 @@
-from pybricks.pupdevices import ForceSensor
+#!/usr/bin/env pybricks-micropython
+from pybricks.pupdevices import ColorSensor
 from pybricks.parameters import Port
 from pybricks.tools import wait
 
-# Initialize the force sensor on Port A.
-force_sensor = ForceSensor(Port.A)
+# Standard MicroPython modules for communication
+from usys import stdin, stdout
+from uselect import poll
 
-while True:
-    # Read sensor values.
-    force = force_sensor.force()
-    distance = force_sensor.distance()
-    press = force_sensor.pressed()
-    touch = force_sensor.touched()
+# Initialize the Color Sensor.
+# You should plug the sensor into a Port on your LEGO Spike Hub
+# and specify that port below. For example, if you plugged it into Port.A, use:
+# sensor = ColorSensor(Port.A)
+# Replace Port.A with the actual port you are using.
+try:
+    sensor = ColorSensor(Port.A)  # Try Port A first, you can change to other ports if needed (B, C, D, E, F)
+except Exception as e:
+    print(f"Error initializing Color Sensor on Port A: {e}. Please check the sensor connection and port.")
+    sensor = None # Handle case where sensor initialization fails
 
-    # Compose a CSV-formatted message.
-    message = "{:.2f},{:.2f},{},{}".format(force, distance, press, touch)
+if sensor: # Proceed only if sensor initialization was successful
+    print("Color Sensor initialized. Waiting for 'prunus' command...")
 
-    # Print the message. This will send it via NUS.
-    print(message)  # Use print() to send data over NUS (actually Command/Event Char!)
+    # Register stdin for polling to allow non-blocking input checks
+    keyboard = poll()
+    keyboard.register(stdin)
 
-    # Wait 200ms before taking the next measurement.
-    wait(200)
+    while True:
+        # Signal readiness to receive command
+        stdout.buffer.write(b"rdy")
+
+        # Check for incoming data without blocking
+        while not keyboard.poll(0):
+            wait(10) # Wait briefly if no input
+
+        # Read up to 5 bytes from input buffer (length of "prunus")
+        cmd = stdin.buffer.read(5)
+
+        # Check if the command is "prunus"
+        if cmd == b"prunus":
+            # Get HSV color values. surface=True for measuring surface color.
+            hsv_color = sensor.hsv(surface=True)
+            hue, saturation, value = hsv_color.h, hsv_color.s, hsv_color.v
+
+            # Get reflection value
+            reflection_value = sensor.reflection()
+
+            # Get ambient light intensity
+            ambient_light = sensor.ambient()
+
+            # Print the data in CSV format to stdout
+            output_data = f"{hue}, {saturation}, {value}, {reflection_value}, {ambient_light}\n"
+            stdout.buffer.write(output_data.encode()) # Encode string to bytes for stdout
+            stdout.buffer.flush() # Ensure data is sent immediately
+            print("Data sent for 'prunus' command.") # Optional confirmation on hub console
+
+        elif cmd == b"bye": # Add a 'bye' command to exit gracefully
+            print("Received 'bye' command. Exiting.")
+            break
+        elif cmd: # If some command was received but not 'prunus' or 'bye'
+            print(f"Received command: {cmd}. Waiting for 'prunus' to send data.") # Optional feedback
+
+        else:
+            pass # No command received, continue waiting
+
+    print("Program finished.")
+
+else:
+    print("Color Sensor not initialized. Please check connection and port.")
