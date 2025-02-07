@@ -241,7 +241,7 @@ function disconnectGATT() {
 }
 
 //This is an example key, you will need to add your key here
-const API_KEY = 'AIzaSyAvx_J6JpLYYJwAGuQsUDTtATB9zlC0L5Q';
+const API_KEY = 'MY_API_KEY;
 //Function for the gemini
 async function analyzeSpectroscopicData(sensorData) {
     statusDiv.textContent += "\nStatus: Getting analysis from Gemini API...";
