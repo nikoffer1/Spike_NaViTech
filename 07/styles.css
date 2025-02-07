@@ -1,0 +1,39 @@
+/* styles.css */
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+}
+#container {
+  text-align: center;
+  max-width: 600px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+button {
+  font-size: 1em;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+#status, #sensorData {
+  margin-top: 20px;
+  text-align: left;
+  background: #e9e9e9;
+  padding: 10px;
+  border-radius: 5px;
+  min-height: 100px;
+  overflow-y: auto;
+  font-family: monospace;
+  white-space: pre-wrap;
+}

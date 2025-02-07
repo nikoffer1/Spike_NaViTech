@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SPIKE Prime Color Sensor Data</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div id="container">
+    <h2>SPIKE Prime Color Sensor Data</h2>
+    <button id="connectButton">Connect to Hub</button>
+    <button id="startButton" disabled>Start Data Stream</button>
+    <button id="stopButton" disabled>Stop Data Stream</button>
+    <button id="prunusButton" disabled>Send 'prunus' Command</button>  <!-- New Prunus Button -->
+    <button id="disconnectButton" disabled>Disconnect</button>
+    <div id="status">Status: Not connected</div>
+    <div id="sensorData">FIRST RUN THE PROGRAM ON HUB</div>
+  </div>
+  </div>
+  <script src="https://esm.run/@google/generative-ai" type="module"></script>
+  <script src="script.js" type="module"></script>
+</body>
+</html>
