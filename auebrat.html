@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Gemini API Quick Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 1em;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      font-size: 1em;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test the Gemini API</h1>
+  <p>Enter your prompt below and click the button to send a request.</p>
+  <textarea id="prompt">Explain how AI works</textarea>
+  <br><br>
+  <button id="submit">Send Request</button>
+  <h2>Response:</h2>
+  <pre id="response">Waiting for response...</pre>
+
+  <script>
+    document.getElementById('submit').addEventListener('click', function() {
+      const promptText = document.getElementById('prompt').value;
+      const API_KEY = 'AIzaSyDLQTdDePYDPB2UwBYdRRzl9wOqGHponIA'; // Replace with your actual Gemini API key
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+      // Create the payload as specified in the quickstart guide
+      const payload = {
+        contents: [{
+          parts: [{ text: promptText }]
+        }]
+      };
+
+      // Send POST request using fetch
+      fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display the JSON response
+        document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.getElementById('response').textContent = 'Error: ' + error;
+      });
+    });
+  </script>
+</body>
+</html>
